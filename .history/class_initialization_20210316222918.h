@@ -1,27 +1,27 @@
-#define close_state				0	//鍏崇伅寰呮満鐘舵€�
-#define worldlinechange_state	1	//涓栫晫绾跨姸鎬�
+#define close_state				0	//关灯待机状态
+#define worldlinechange_state	1	//世界线状态
 
-#define time_state			2	//鏄炬椂鐘舵€�
-	#define time_state_time			1		//鏃堕棿
-	#define time_state_date			2		//鏃ユ湡
-	#define time_state_day			3		//鏄熸湡
+#define time_state			2	//显时状态
+	#define time_state_time			1		//时间
+	#define time_state_date			2		//日期
+	#define time_state_day			3		//星期
 
-#define autotimeproof_state		3	//鑷姩鏍″鐘舵€�
+#define autotimeproof_state		3	//自动校对状态
 
-#define timeproof_state	4	//鎵嬪姩鏍℃椂-鏃堕棿
-	#define timeproof_state_time	1		//鏃堕棿
-	#define timeproof_state_date	2		//鏃ユ湡
-	#define timeproof_state_day		3		//鏄熸湡
+#define timeproof_state	4	//手动校时-时间
+	#define timeproof_state_time	1		//时间
+	#define timeproof_state_date	2		//日期
+	#define timeproof_state_day		3		//星期
 
 
 
 #define digitalmission_ON		1
 #define digitalmission_OFF		0
 
-#define LE						3	//鏃堕挓
+#define LE						3	//时钟
 #define CLK						2
 
-#define RECV_PIN				9	//绾㈠
+#define RECV_PIN				9	//红外
 
 #define light_PIN				8
 
@@ -33,7 +33,7 @@
 #define PT_out					PT_EXIT(pt)
 
 
-//绾㈠閬ユ帶鍣ㄦ寜閿紪鐮�
+//红外遥控器按键编码
 /*#define B_POWER					0xFFA25D	
 #define B_MENUE					0xFFE21D
 #define B_TEST					0xFF22DD
@@ -55,7 +55,7 @@
 #define B_9						0xFF52AD
 #define B_C						0xFFB04F*/
 	
-#define B_POWER					0x6A68351E	//鎵嬫満绾㈠缂栫爜
+#define B_POWER					0x6A68351E	//手机红外编码
 #define B_MENUE					0xDC95DD23
 #define B_ANALOGSOURCE			0x40C1789F
 #define B_HOME					0xCD9141E
@@ -83,7 +83,7 @@
 #define DebugSerial Serial
 #define NOP do { __asm__ __volatile__ ("nop"); } while (0)
 
-//鏃堕棿绫�--------------------------------------------------------------
+//时间类--------------------------------------------------------------
 class Time
 {
 private:
@@ -97,26 +97,26 @@ private:
 public:
 	bool Century;
 	Time();
-	void GetTime();//DS绫籫etTime鐨勭畝鍖栥€�
+	void GetTime();//DS类getTime的简化。
 	uchar get_sec();
 	bool h24;
 	bool PM;
 	uchar time_mission_key;
 };
 
-//GPS绫�------------------------------------------------------------
+//GPS类------------------------------------------------------------
 class GPSdata
 {
 private:
 	char GPS_Buffer[80];
 	
-	bool isParseData;	//鏄惁瑙ｆ瀽瀹屾垚
-	char latitude[11];		//绾害
+	bool isParseData;	//是否解析完成
+	char latitude[11];		//纬度
 	char N_S[2];		//N/S
-	char longitude[12];		//缁忓害
+	char longitude[12];		//经度
 	char E_W[2];		//E/W
-	char UTCdate[6];		//UTC鏃ユ湡
-	bool isUsefull;		//瀹氫綅淇℃伅鏄惁鏈夋晥
+	char UTCdate[6];		//UTC日期
+	bool isUsefull;		//定位信息是否有效
 	
 public:
 	char UTCTime[11];
@@ -126,76 +126,76 @@ public:
 	uchar Date;
 	uchar Month;
 	uchar Year;
-	bool isGetData;		//鏄惁鑾峰彇鍒癎PS鏁版嵁
+	bool isGetData;		//是否获取到GPS数据
 	char gpsRxBuffer[gpsRxBufferLength];
 	unsigned int ii = 0;
 	void restart_EGPS();
-	void gpsRead();//鑾峰彇GPS鏁版嵁
-	void clrGpsRxBuffer();//娓呯┖
+	void gpsRead();//获取GPS数据
+	void clrGpsRxBuffer();//清空
 	void errorLog(int num);
-	void parseGpsBuffer();//瑙ｆ瀽GPS鏁版嵁
+	void parseGpsBuffer();//解析GPS数据
 	void tr_gps_time();
 	void prooftime();
 };
 
-//涓栫晫绾�--------------------------------------------------------------
+//世界线--------------------------------------------------------------
 class world_line_change
 {
 private:
-	uchar flash_number[8];//鍒锋柊鏃剁殑8涓暟瀛�
-	uchar stop_number[8];//鍚笅鏃剁殑8涓暟瀛�
-	char main_worldline;//鏈€楂樹綅涓讳笘鐣岀嚎
-	bool stop_state[8];//鏌愪綅鏄惁宸茬粡鍋滀笅
-	char stop_queue[8];//閫変綅鍋滄闃熷垪
+	uchar flash_number[8];//刷新时的8个数字
+	uchar stop_number[8];//听下时的8个数字
+	char main_worldline;//最高位主世界线
+	bool stop_state[8];//某位是否已经停下
+	char stop_queue[8];//选位停止队列
 	char stop_type;
 	
 public:
 	world_line_change();
-	void get_new_flashworldline();//闅忔満涓€缁�8浣嶆暟瀛�
-	void new_worldline();//鏂扮殑鍋滄鏁板瓧
+	void get_new_flashworldline();//随机一组8位数字
+	void new_worldline();//新的停止数字
 	uchar get_flashnum(uchar i);
 	uchar get_stopnum(uchar i);
-	void new_stopqueue();//閫変綅娲楃墝
+	void new_stopqueue();//选位洗牌
 	char get_stopqueue(char i);
-	void change_allstopstate_ON();//寮€鍚墍鏈変綅鍒锋柊
-	void close_stopstate(char i);//鍏抽棴鏌愪竴浣嶅埛鏂�
+	void change_allstopstate_ON();//开启所有位刷新
+	void close_stopstate(char i);//关闭某一位刷新
 	bool get_stopstate(char i);
 	void new_stop_type();
 	char get_stoptype();
 
 };
 
-//杈夊厜绠�---------------------------------------------------------------
+//辉光管---------------------------------------------------------------
 class Glow_tube
 {
 private:
-	int binary_queue[8];//8涓�16浣嶄簩杩涘埗鏁�
-	uchar state[2];//褰撳墠鐨勫伐浣滅姸鎬�
+	int binary_queue[8];//8个16位二进制数
+	uchar state[2];//当前的工作状态
 public:
 	Glow_tube();
 	uchar last_state[2];
-	void get_new_number();//鑾峰彇鏂版暟瀛椼€愮姸鎬併€�
-	void anime(int a);//鑾峰彇涓嶅悓鍔ㄧ敾
-	uchar return_number(uchar i);//閫佸嚭鏁版嵁
-	void change_state(uchar state_num, uchar new_state);//鍒囨崲妯″紡
+	void get_new_number();//获取新数字【状态】
+	void anime(int a);//获取不同动画
+	uchar return_number(uchar i);//送出数据
+	void change_state(uchar state_num, uchar new_state);//切换模式
 	uchar get_state(int a);
-	void set_number(uchar a);//鍏ㄩ儴缃暟
+	void set_number(uchar a);//全部置数
 	void set_queue(uchar a,uchar b);
 };
 
-//杈撳嚭鏂规硶-----------------------------------------------------------------
+//输出方法-----------------------------------------------------------------
 class digital_way
 {
 private:
 public:
-	void digital_mission();//杈撳嚭鍑芥暟
+	void digital_mission();//输出函数
 	void proofsuccess_anime();
 	void proofailed_anime();
-	void fourway_digital_once(bool a, bool b, bool c, bool d, bool rl);//涓€娆″洓浣嶅苟琛岃緭鍑�
-	void digital_onenumber(int a, bool rl);//杈撳嚭涓€涓暟瀛�
+	void fourway_digital_once(bool a, bool b, bool c, bool d, bool rl);//一次四位并行输出
+	void digital_onenumber(int a, bool rl);//输出一个数字
 };
 
-//杈撳叆鏂规硶-----------------------------------------------------------
+//输入方法-----------------------------------------------------------
 class analog_in_way
 {
 private:
@@ -208,14 +208,14 @@ public:
 	void restart_analog();
 };
 
-//鑿滃崟妯″潡--------------------------------------
+//菜单模块--------------------------------------
 class menu
 {
 private:
 public:
 };
 
-//鎵嬪姩璋冩椂妯″潡
+//手动调时模块
 class prooftime
 {
 private:

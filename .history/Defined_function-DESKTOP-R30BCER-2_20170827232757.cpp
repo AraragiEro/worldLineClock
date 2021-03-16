@@ -11,7 +11,7 @@
 
 //#include <variant.h> 
 
-//-----------------------ÊµÀı»¯----------------------------
+//-----------------------å®ä¾‹åŒ–----------------------------
 Time E_Time = Time();
 
 DS3231 E_clock;
@@ -28,12 +28,12 @@ GPSdata E_GPSdata;
 
 analog_in_way E_analog_in_way=analog_in_way();
 
-IRrecv irrecv(RECV_PIN);//ºìÍâÀàÉùÃ÷£¬¶Ë¿Ú³õÊ¼»¯£¬½âÎö³õÊ¼»¯¡£
+IRrecv irrecv(RECV_PIN);//çº¢å¤–ç±»å£°æ˜ï¼Œç«¯å£åˆå§‹åŒ–ï¼Œè§£æåˆå§‹åŒ–ã€‚
 decode_results results;
 
 
 
-//TimeÀàº¯Êı¶¨Òå----------------------------------------------------------
+//Timeç±»å‡½æ•°å®šä¹‰----------------------------------------------------------
 Time::Time()
 {
 	//E_clock.getTime(Year,Month,Date,DoW,hour,min,sec);
@@ -72,12 +72,12 @@ void GPSdata::restart_EGPS()
 	E_GPSdata.isUsefull = false;
 }
 
-//GPSÀà----------------------------------------------------------------------
+//GPSç±»----------------------------------------------------------------------
 void GPSdata::gpsRead()
 {
 	while (isGetData == false)
 	{
-		while (GpsSerial.available())//ÓĞÊı¾İÊ±
+		while (GpsSerial.available())//æœ‰æ•°æ®æ—¶
 		{
 			gpsRxBuffer[ii++] = GpsSerial.read();
 			if (ii == gpsRxBufferLength)clrGpsRxBuffer();
@@ -85,12 +85,12 @@ void GPSdata::gpsRead()
 
 		char* GPS_BufferHead;
 		char* GPS_BufferTail;
-		if ((GPS_BufferHead = strstr(gpsRxBuffer, "$GPRMC,")) != NULL || (GPS_BufferHead = strstr(gpsRxBuffer, "$GNRMC,")) != NULL)/*»º³åÄÚÓĞGPRMC»òGNRMC×Ö½Ú*/
+		if ((GPS_BufferHead = strstr(gpsRxBuffer, "$GPRMC,")) != NULL || (GPS_BufferHead = strstr(gpsRxBuffer, "$GNRMC,")) != NULL)/*ç¼“å†²å†…æœ‰GPRMCæˆ–GNRMCå­—èŠ‚*/
 		{
 			if (((GPS_BufferTail = strstr(GPS_BufferHead, "\r\n")) != NULL) && (GPS_BufferTail > GPS_BufferHead))
 			{
 				memcpy(E_GPSdata.GPS_Buffer, GPS_BufferHead, GPS_BufferTail - GPS_BufferHead);
-				E_GPSdata.isGetData = true;//¸ü¸Ä±êÖ¾£ºÒÑ»ñµÃĞÅÏ¢
+				E_GPSdata.isGetData = true;//æ›´æ”¹æ ‡å¿—ï¼šå·²è·å¾—ä¿¡æ¯
 
 				clrGpsRxBuffer();
 			}
@@ -100,7 +100,7 @@ void GPSdata::gpsRead()
 
 void GPSdata::clrGpsRxBuffer()
 {
-	memset(gpsRxBuffer, 0, gpsRxBufferLength);      //½«Ä³Ò»¿éÄÚ´æÇ°N×Ö½ÚÖÃch
+	memset(gpsRxBuffer, 0, gpsRxBufferLength);      //å°†æŸä¸€å—å†…å­˜å‰Nå­—èŠ‚ç½®ch
 	ii = 0;
 }
 
@@ -120,7 +120,7 @@ void GPSdata::parseGpsBuffer()
 			if (i == 0)
 			{
 				if ((subString = strstr(E_GPSdata.GPS_Buffer, ",")) == NULL)
-					errorLog(1);	//½âÎö´íÎó
+					errorLog(1);	//è§£æé”™è¯¯
 			}
 			else
 			{
@@ -130,13 +130,13 @@ void GPSdata::parseGpsBuffer()
 					char usefullBuffer[2];
 					switch (i)
 					{
-					case 1:memcpy(E_GPSdata.UTCTime, subString, subStringNext - subString); break;	//»ñÈ¡UTCÊ±¼ä
-					case 2:memcpy(usefullBuffer, subString, subStringNext - subString); break;	//¶¨Î»×´Ì¬
-					/*case 3:memcpy(E_GPSdata.latitude, subString, subStringNext - subString); break;	//»ñÈ¡Î³¶ÈĞÅÏ¢
-					case 4:memcpy(E_GPSdata.N_S, subString, subStringNext - subString); break;	//»ñÈ¡N/S
-					case 5:memcpy(E_GPSdata.longitude, subString, subStringNext - subString); break;	//»ñÈ¡Î³¶ÈĞÅÏ¢
-					case 6:memcpy(E_GPSdata.E_W, subString, subStringNext - subString); break;	//»ñÈ¡E/W*/
-					case 9:memcpy(E_GPSdata.UTCdate, subString, subStringNext - subString); break;	//»ñÈ¡E/W
+					case 1:memcpy(E_GPSdata.UTCTime, subString, subStringNext - subString); break;	//è·å–UTCæ—¶é—´
+					case 2:memcpy(usefullBuffer, subString, subStringNext - subString); break;	//å®šä½çŠ¶æ€
+					/*case 3:memcpy(E_GPSdata.latitude, subString, subStringNext - subString); break;	//è·å–çº¬åº¦ä¿¡æ¯
+					case 4:memcpy(E_GPSdata.N_S, subString, subStringNext - subString); break;	//è·å–N/S
+					case 5:memcpy(E_GPSdata.longitude, subString, subStringNext - subString); break;	//è·å–çº¬åº¦ä¿¡æ¯
+					case 6:memcpy(E_GPSdata.E_W, subString, subStringNext - subString); break;	//è·å–E/W*/
+					case 9:memcpy(E_GPSdata.UTCdate, subString, subStringNext - subString); break;	//è·å–E/W
 
 					default:break;
 					}
@@ -151,7 +151,7 @@ void GPSdata::parseGpsBuffer()
 				}
 				else
 				{
-					errorLog(2);	//½âÎö´íÎó
+					errorLog(2);	//è§£æé”™è¯¯
 				}
 			}
 		}
@@ -179,7 +179,7 @@ void GPSdata::prooftime()
 	E_clock.setYear(Year);
 }
 
-//ÊÀ½çÏßÀà-----------------------------------------------------------------------
+//ä¸–ç•Œçº¿ç±»-----------------------------------------------------------------------
 world_line_change::world_line_change()
 {
 	flash_number[8] = { 0 };
@@ -271,7 +271,7 @@ char world_line_change::get_stoptype()
 
 
 
-//»Ô¹â¹ÜÀà------------------------------------------------------------------------
+//è¾‰å…‰ç®¡ç±»------------------------------------------------------------------------
 Glow_tube::Glow_tube()
 {
 	binary_queue[4] = { 0 };
@@ -285,11 +285,11 @@ int Glow_tube::trans_new_number(char a)
 	return b;
 }
 
-void Glow_tube::get_new_number()//ĞŞ¸ÄÊä³öÊı¾İ
+void Glow_tube::get_new_number()//ä¿®æ”¹è¾“å‡ºæ•°æ®
 {
 	switch (E_Glow_tube.state)
 	{
-	case time_state://×ßÊ±
+	case time_state://èµ°æ—¶
 	{
 		binary_queue[7] = trans_new_number(E_clock.getHour(E_Time.h24, E_Time.PM) / 10);
 		binary_queue[6] = trans_new_number(E_clock.getHour(E_Time.h24, E_Time.PM) % 10);
@@ -301,7 +301,7 @@ void Glow_tube::get_new_number()//ĞŞ¸ÄÊä³öÊı¾İ
 		binary_queue[0] = trans_new_number(E_clock.getSecond() % 10);
 		}; break;
 
-	case worldlinechange_state://ÊÀ½çÏßÉÁË¸
+	case worldlinechange_state://ä¸–ç•Œçº¿é—ªçƒ
 	{
 		for (char c=7;c>=0;c--)
 		{
@@ -339,9 +339,9 @@ uchar Glow_tube::get_state()
 }
 
 
-//Êä³ö·½·¨-----------------------------------------------------------------
+//è¾“å‡ºæ–¹æ³•-----------------------------------------------------------------
 
-void digital_way::digital_mission()//Êä³öÒ»´ÎÊı¾İ²¢µãµÆ
+void digital_way::digital_mission()//è¾“å‡ºä¸€æ¬¡æ•°æ®å¹¶ç‚¹ç¯
 {
 	
 	for (char glow = 0; glow < 8; glow++)
@@ -379,7 +379,7 @@ void digital_way::proofailed_anime()
 {
 }
 
-//ÊäÈë·½·¨-----------------------------------------------------------
+//è¾“å…¥æ–¹æ³•-----------------------------------------------------------
 analog_in_way::analog_in_way()
 {
 	IR_state = false;
@@ -397,8 +397,8 @@ void analog_in_way::restart_analog()
 
 
 
-//--------------Ïß³ÌÈÎÎñ¶¨Òå-----------------------
-static int pt_IR_mission(struct pt *pt)//ºìÍâ½ÓÊÕÏß³Ì£¬Ã¿¸ô100ms¼ì²âºìÍâÊäÈë¡£
+//--------------çº¿ç¨‹ä»»åŠ¡å®šä¹‰-----------------------
+static int pt_IR_mission(struct pt *pt)//çº¢å¤–æ¥æ”¶çº¿ç¨‹ï¼Œæ¯éš”100msæ£€æµ‹çº¢å¤–è¾“å…¥ã€‚
 {
 	PT_BEGIN(pt);
 	while (1)
@@ -424,17 +424,17 @@ static int pt_IR_mission(struct pt *pt)//ºìÍâ½ÓÊÕÏß³Ì£¬Ã¿¸ô100ms¼ì²âºìÍâÊäÈë¡£
 
 }
 
-static int pt_time_mission(struct  pt *pt)//ÏÔÊ±Ïß³Ì£¬ÏÔÊ±×´Ì¬´¥·¢
+static int pt_time_mission(struct  pt *pt)//æ˜¾æ—¶çº¿ç¨‹ï¼Œæ˜¾æ—¶çŠ¶æ€è§¦å‘
 {
 	PT_BEGIN(pt);
-	//-----ÈÎÎñ-----
+	//-----ä»»åŠ¡-----
 	
 	E_Time.GetTime();
 	static int time_mission_key;
 	time_mission_key = 0;
 	while (1)
 	{
-		//Ê±¼äÄ£Ê½´¥·¢
+		//æ—¶é—´æ¨¡å¼è§¦å‘
 		PT_WAIT_UNTIL(pt, E_Glow_tube.get_state() == time_state);
 		if(E_clock.getSecond() - E_Time.get_sec() != 0)
 		{
@@ -460,23 +460,23 @@ static int pt_time_mission(struct  pt *pt)//ÏÔÊ±Ïß³Ì£¬ÏÔÊ±×´Ì¬´¥·¢
 	PT_END(pt);
 }
 
-static int pt_worldline_mission(struct pt *pt)//ÊÀ½çÏßÏß³Ì£¬ÊÀ½çÏß×´Ì¬´¥·¢
+static int pt_worldline_mission(struct pt *pt)//ä¸–ç•Œçº¿çº¿ç¨‹ï¼Œä¸–ç•Œçº¿çŠ¶æ€è§¦å‘
 {
 	PT_BEGIN(pt);
 	while (1)
 	{
-		//ÊÀ½çÏßÏßÄ£Ê½Ê±´¥·¢
+		//ä¸–ç•Œçº¿çº¿æ¨¡å¼æ—¶è§¦å‘
 		PT_WAIT_UNTIL(pt, E_Glow_tube.get_state() == worldlinechange_state);
-		//------Ò»£¬Æô¶¯¶¯»­
+		//------ä¸€ï¼Œå¯åŠ¨åŠ¨ç”»
 
-		//------¶ş£¬¼ì²âÊÀ½çÏß½×¶Î
+		//------äºŒï¼Œæ£€æµ‹ä¸–ç•Œçº¿é˜¶æ®µ
 		{static char jishu;
-		for (jishu=0;jishu<4;)//¼ÆÊıÂúÈı´Î½øÈëÏÂÒ»½×¶Î
+		for (jishu=0;jishu<4;)//è®¡æ•°æ»¡ä¸‰æ¬¡è¿›å…¥ä¸‹ä¸€é˜¶æ®µ
 		{
-			E_world_line_change.change_allstopstate_ON();//Ë¢ĞÂÎ»ÖØÖÃ
-			E_world_line_change.new_worldline();//¹Ì¶¨ÊÀ½çÏß
-			E_world_line_change.new_stop_type();//»ñµÃ±¾´ÎÍ£Ö¹Ä£Ê½
-			//Ç°ÖÃË¢ĞÂÊ±¼ä1.5s
+			E_world_line_change.change_allstopstate_ON();//åˆ·æ–°ä½é‡ç½®
+			E_world_line_change.new_worldline();//å›ºå®šä¸–ç•Œçº¿
+			E_world_line_change.new_stop_type();//è·å¾—æœ¬æ¬¡åœæ­¢æ¨¡å¼
+			//å‰ç½®åˆ·æ–°æ—¶é—´1.5s
 			{static char a;
 			for (a = 0; a < 90; a++)
 			{
@@ -486,7 +486,7 @@ static int pt_worldline_mission(struct pt *pt)//ÊÀ½çÏßÏß³Ì£¬ÊÀ½çÏß×´Ì¬´¥·¢
 				PT_TIMER_DELAY(pt, 17);
 			}}
 			//-----------------------------------------------------
-			if (E_world_line_change.get_stoptype() == 1)//¢ÙÖğÎ»Í£Ö¹Ë¢ĞÂ
+			if (E_world_line_change.get_stoptype() == 1)//â‘ é€ä½åœæ­¢åˆ·æ–°
 				{
 					{static char e;
 					for (e = 7; e >= -1; e--)
@@ -501,13 +501,13 @@ static int pt_worldline_mission(struct pt *pt)//ÊÀ½çÏßÏß³Ì£¬ÊÀ½çÏß×´Ì¬´¥·¢
 						}}
 						E_world_line_change.close_stopstate(e);
 					}}
-					jishu++;//¼ÆÊıÒ»´Î
+					jishu++;//è®¡æ•°ä¸€æ¬¡
 					PT_TIMER_DELAY(pt, 600);
 				}
 			//------------------------------------------------
-			else if (E_world_line_change.get_stoptype() == 2)//¢ÚÑ¡Î»Í£Ö¹Ë¢ĞÂ
+			else if (E_world_line_change.get_stoptype() == 2)//â‘¡é€‰ä½åœæ­¢åˆ·æ–°
 				{
-					E_world_line_change.new_stopqueue();//»ñÈ¡±¾´ÎÍ£Ö¹¶ÓÁĞ
+					E_world_line_change.new_stopqueue();//è·å–æœ¬æ¬¡åœæ­¢é˜Ÿåˆ—
 					{static char e;
 					for (e = 7; e >= -1; e--)
 					{
@@ -521,11 +521,11 @@ static int pt_worldline_mission(struct pt *pt)//ÊÀ½çÏßÏß³Ì£¬ÊÀ½çÏß×´Ì¬´¥·¢
 						}}
 						E_world_line_change.close_stopstate(E_world_line_change.get_stopqueue(e));
 					}}
-					jishu++;//¼ÆÊıÒ»´Î
+					jishu++;//è®¡æ•°ä¸€æ¬¡
 					PT_TIMER_DELAY(pt, 600);
 				}
 			//-----------------------------------------------------
-			else if (E_world_line_change.get_stoptype() == 3)//¢ÛÍ¬Ê±Í£Ö¹
+			else if (E_world_line_change.get_stoptype() == 3)//â‘¢åŒæ—¶åœæ­¢
 				{
 					E_world_line_change.get_new_flashworldline();
 					E_Glow_tube.get_new_number();
@@ -535,10 +535,10 @@ static int pt_worldline_mission(struct pt *pt)//ÊÀ½çÏßÏß³Ì£¬ÊÀ½çÏß×´Ì¬´¥·¢
 		}}
 		
 
-		//------Èı£¬È·ÈÏÊÀ½çÏß
+		//------ä¸‰ï¼Œç¡®è®¤ä¸–ç•Œçº¿
 		{
-			E_world_line_change.change_allstopstate_ON();//Ë¢ĞÂÎ»ÖØÖÃ
-			E_world_line_change.new_stopqueue();//»ñÈ¡±¾´ÎÍ£Ö¹¶ÓÁĞ
+			E_world_line_change.change_allstopstate_ON();//åˆ·æ–°ä½é‡ç½®
+			E_world_line_change.new_stopqueue();//è·å–æœ¬æ¬¡åœæ­¢é˜Ÿåˆ—
 			{static char e;
 			for (e = 7; e >= -1; e--)
 			{
@@ -559,7 +559,7 @@ static int pt_worldline_mission(struct pt *pt)//ÊÀ½çÏßÏß³Ì£¬ÊÀ½çÏß×´Ì¬´¥·¢
 	PT_END(pt);
 }
 
-static int pt_autoprooftime_mission(struct  pt *pt)//×Ô¶¯Ğ£Ê±Ïß³Ì
+static int pt_autoprooftime_mission(struct  pt *pt)//è‡ªåŠ¨æ ¡æ—¶çº¿ç¨‹
 {
 	PT_BEGIN(pt);
 	static char proof_key;
@@ -604,27 +604,27 @@ static int pt_autoprooftime_mission(struct  pt *pt)//×Ô¶¯Ğ£Ê±Ïß³Ì
 	PT_END(pt);
 }
 
-static int pt_menu_state_mission(struct pt *pt)//Ò£¿ØÆ÷²Ù×÷£¬³£×¤
+static int pt_menu_state_mission(struct pt *pt)//é¥æ§å™¨æ“ä½œï¼Œå¸¸é©»
 {
 	PT_BEGIN(pt);
 	while (1)
 	{
 		PT_WAIT_UNTIL(pt, E_analog_in_way.IR_state==true);
-		if (E_Glow_tube.get_state()==time_state)//else if ½á¹¹·Ö×´Ì¬ÅĞ¶ÏÊäÈë
+		if (E_Glow_tube.get_state()==time_state)//else if ç»“æ„åˆ†çŠ¶æ€åˆ¤æ–­è¾“å…¥
 		{
-			if (E_analog_in_way.IR_code == B_POWER)//¿ª¹ØµÆ
+			if (E_analog_in_way.IR_code == B_POWER)//å¼€å…³ç¯
 			{
 				E_Glow_tube.change_state(close_state);
 				E_analog_in_way.restart_analog();
 			}
 			else if (E_analog_in_way.IR_code == B_HOME)
 			{
-				E_Glow_tube.change_state(worldlinechange_state);//ÊÀ½çÏß
+				E_Glow_tube.change_state(worldlinechange_state);//ä¸–ç•Œçº¿
 				E_analog_in_way.restart_analog();
 			}
 			else if (E_analog_in_way.IR_code==B_CANCEL)
 			{
-				E_Glow_tube.change_state(timeproof_state);//×Ô¶¯Ğ£×¼
+				E_Glow_tube.change_state(timeproof_state);//è‡ªåŠ¨æ ¡å‡†
 				E_analog_in_way.restart_analog();
 			}
 		}
@@ -633,18 +633,18 @@ static int pt_menu_state_mission(struct pt *pt)//Ò£¿ØÆ÷²Ù×÷£¬³£×¤
 		{
 			if (E_analog_in_way.IR_code==B_HOME)
 			{
-				E_Glow_tube.change_state(worldlinechange_state);//ÊÀ½çÏß
+				E_Glow_tube.change_state(worldlinechange_state);//ä¸–ç•Œçº¿
 				E_analog_in_way.restart_analog();
 			}
 			else
 			{
-				E_Glow_tube.change_state(time_state);//Ê±¼ä£¬³£ÁÁ»òÑÓ³ÙÅĞ¶ÏÔÚÊ±¼äÏß³Ì
+				E_Glow_tube.change_state(time_state);//æ—¶é—´ï¼Œå¸¸äº®æˆ–å»¶è¿Ÿåˆ¤æ–­åœ¨æ—¶é—´çº¿ç¨‹
 				E_analog_in_way.restart_analog();
 			}
 		}
 		else
 		{
-			E_analog_in_way.restart_analog();//²»·ûºÏ£¬IRÊäÈëÇåÁã		
+			E_analog_in_way.restart_analog();//ä¸ç¬¦åˆï¼ŒIRè¾“å…¥æ¸…é›¶		
 		}
 	}
 	PT_END(pt);

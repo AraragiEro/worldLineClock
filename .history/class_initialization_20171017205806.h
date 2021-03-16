@@ -1,27 +1,27 @@
-#define close_state				0	//éå´‡ä¼…å¯°å‘®æº€é˜èˆµâ‚¬ï¿½
-#define worldlinechange_state	1	//æ¶“æ «æ™«ç»¾è·¨å§¸é¬ï¿½
+#define close_state				0	//¹ØµÆ´ı»ú×´Ì¬
+#define worldlinechange_state	1	//ÊÀ½çÏß×´Ì¬
 
-#define time_state			2	//é„ç‚¬æ¤‚é˜èˆµâ‚¬ï¿½
-	#define time_state_time			1		//éƒå •æ£¿
-	#define time_state_date			2		//éƒãƒ¦æ¹¡
-	#define time_state_day			3		//é„ç†¸æ¹¡
+#define time_state			2	//ÏÔÊ±×´Ì¬
+	#define time_state_time			1		//Ê±¼ä
+	#define time_state_date			2		//ÈÕÆÚ
+	#define time_state_day			3		//ĞÇÆÚ
 
-#define autotimeproof_state		3	//é‘·î„å§©éâ€³î‡®é˜èˆµâ‚¬ï¿½
+#define autotimeproof_state		3	//×Ô¶¯Ğ£¶Ô×´Ì¬
 
-#define timeproof_state	4	//éµå¬ªå§©éâ„ƒæ¤‚-éƒå •æ£¿
-	#define timeproof_state_time	1		//éƒå •æ£¿
-	#define timeproof_state_date	2		//éƒãƒ¦æ¹¡
-	#define timeproof_state_day		3		//é„ç†¸æ¹¡
+#define timeproof_state	4	//ÊÖ¶¯Ğ£Ê±-Ê±¼ä
+	#define timeproof_state_time	1		//Ê±¼ä
+	#define timeproof_state_date	2		//ÈÕÆÚ
+	#define timeproof_state_day		3		//ĞÇÆÚ
 
 
 
 #define digitalmission_ON		1
 #define digitalmission_OFF		0
 
-#define LE						3	//éƒå •æŒ“
+#define LE						3	//Ê±ÖÓ
 #define CLK						2
 
-#define RECV_PIN				9	//ç»¾ãˆ î˜»
+#define RECV_PIN				9	//ºìÍâ
 
 #define light_PIN				8
 
@@ -33,7 +33,7 @@
 #define PT_out					PT_EXIT(pt)
 
 
-//ç»¾ãˆ î˜»é–¬ãƒ¦å¸¶é£ã„¦å¯œé–¿î†¾ç´ªé®ï¿½
+//ºìÍâÒ£¿ØÆ÷°´¼ü±àÂë
 /*#define B_POWER					0xFFA25D	
 #define B_MENUE					0xFFE21D
 #define B_TEST					0xFF22DD
@@ -55,7 +55,7 @@
 #define B_9						0xFF52AD
 #define B_C						0xFFB04F*/
 	
-#define B_POWER					0x6A68351E	//éµå¬«æº€ç»¾ãˆ î˜»ç¼‚æ «çˆœ
+#define B_POWER					0x6A68351E	//ÊÖ»úºìÍâ±àÂë
 #define B_MENUE					0xDC95DD23
 #define B_ANALOGSOURCE			0x40C1789F
 #define B_HOME					0xCD9141E
@@ -83,7 +83,7 @@
 #define DebugSerial Serial
 #define NOP do { __asm__ __volatile__ ("nop"); } while (0)
 
-//éƒå •æ£¿ç»«ï¿½--------------------------------------------------------------
+//Ê±¼äÀà--------------------------------------------------------------
 class Time
 {
 private:
@@ -97,26 +97,26 @@ private:
 public:
 	bool Century;
 	Time();
-	void GetTime();//DSç»«ç±«etTimeé¨å‹­ç•é–æ ¥â‚¬ï¿½
+	void GetTime();//DSÀàgetTimeµÄ¼ò»¯¡£
 	uchar get_sec();
 	bool h24;
 	bool PM;
 	uchar time_mission_key;
 };
 
-//GPSç»«ï¿½------------------------------------------------------------
+//GPSÀà------------------------------------------------------------
 class GPSdata
 {
 private:
 	char GPS_Buffer[80];
 	
-	bool isParseData;	//é„îˆšæƒç‘™ï½†ç€½ç€¹å±¾åš
-	char latitude[11];		//ç»¾î„€å®³
+	bool isParseData;	//ÊÇ·ñ½âÎöÍê³É
+	char latitude[11];		//Î³¶È
 	char N_S[2];		//N/S
-	char longitude[12];		//ç¼å¿“å®³
+	char longitude[12];		//¾­¶È
 	char E_W[2];		//E/W
-	char UTCdate[6];		//UTCéƒãƒ¦æ¹¡
-	bool isUsefull;		//ç€¹æ°«ç¶…æ·‡â„ƒä¼…é„îˆšæƒéˆå¤‹æ™¥
+	char UTCdate[6];		//UTCÈÕÆÚ
+	bool isUsefull;		//¶¨Î»ĞÅÏ¢ÊÇ·ñÓĞĞ§
 	
 public:
 	char UTCTime[11];
@@ -126,76 +126,76 @@ public:
 	uchar Date;
 	uchar Month;
 	uchar Year;
-	bool isGetData;		//é„îˆšæƒé‘¾å³°å½‡é’ç™PSéç‰ˆåµ
+	bool isGetData;		//ÊÇ·ñ»ñÈ¡µ½GPSÊı¾İ
 	char gpsRxBuffer[gpsRxBufferLength];
 	unsigned int ii = 0;
 	void restart_EGPS();
-	void gpsRead();//é‘¾å³°å½‡GPSéç‰ˆåµ
-	void clrGpsRxBuffer();//å¨“å‘¯â”–
+	void gpsRead();//»ñÈ¡GPSÊı¾İ
+	void clrGpsRxBuffer();//Çå¿Õ
 	void errorLog(int num);
-	void parseGpsBuffer();//ç‘™ï½†ç€½GPSéç‰ˆåµ
+	void parseGpsBuffer();//½âÎöGPSÊı¾İ
 	void tr_gps_time();
 	void prooftime();
 };
 
-//æ¶“æ «æ™«ç»¾ï¿½--------------------------------------------------------------
+//ÊÀ½çÏß--------------------------------------------------------------
 class world_line_change
 {
 private:
-	uchar flash_number[8];//é’é”‹æŸŠéƒå‰æ®‘8æ¶“î…æšŸç€›ï¿½
-	uchar stop_number[8];//éšîƒ¿ç¬…éƒå‰æ®‘8æ¶“î…æšŸç€›ï¿½
-	char main_worldline;//éˆâ‚¬æ¥‚æ¨¹ç¶…æ¶“è®³ç¬˜é£å²€åš
-	bool stop_state[8];//éŒæ„ªç¶…é„îˆšæƒå®¸èŒ¬ç²¡é‹æ»€ç¬…
-	char stop_queue[8];//é–«å¤‰ç¶…é‹æ»„î„›é—ƒç†·åª
+	uchar flash_number[8];//Ë¢ĞÂÊ±µÄ8¸öÊı×Ö
+	uchar stop_number[8];//ÌıÏÂÊ±µÄ8¸öÊı×Ö
+	char main_worldline;//×î¸ßÎ»Ö÷ÊÀ½çÏß
+	bool stop_state[8];//Ä³Î»ÊÇ·ñÒÑ¾­Í£ÏÂ
+	char stop_queue[8];//Ñ¡Î»Í£Ö¹¶ÓÁĞ
 	char stop_type;
 	
 public:
 	world_line_change();
-	void get_new_flashworldline();//é—…å¿”æº€æ¶“â‚¬ç¼ï¿½8æµ£å¶†æšŸç€›ï¿½
-	void new_worldline();//é‚æ‰®æ®‘é‹æ»„î„›éæ¿ç“§
+	void get_new_flashworldline();//Ëæ»úÒ»×é8Î»Êı×Ö
+	void new_worldline();//ĞÂµÄÍ£Ö¹Êı×Ö
 	uchar get_flashnum(uchar i);
 	uchar get_stopnum(uchar i);
-	void new_stopqueue();//é–«å¤‰ç¶…å¨²æ¥ƒå¢
+	void new_stopqueue();//Ñ¡Î»Ï´ÅÆ
 	char get_stopqueue(char i);
-	void change_allstopstate_ON();//å¯®â‚¬éšîˆ›å¢éˆå¤‰ç¶…é’é”‹æŸŠ
-	void close_stopstate(char i);//éæŠ½æ£´éŒæ„ªç«´æµ£å¶…åŸ›é‚ï¿½
+	void change_allstopstate_ON();//¿ªÆôËùÓĞÎ»Ë¢ĞÂ
+	void close_stopstate(char i);//¹Ø±ÕÄ³Ò»Î»Ë¢ĞÂ
 	bool get_stopstate(char i);
 	void new_stop_type();
 	char get_stoptype();
 
 };
 
-//æˆå¤Šåœç» ï¿½---------------------------------------------------------------
+//»Ô¹â¹Ü---------------------------------------------------------------
 class Glow_tube
 {
 private:
-	int binary_queue[8];//8æ¶“ï¿½16æµ£å¶„ç°©æ©æ¶˜åŸ—éï¿½
-	uchar state[2];//è¤°æ’³å¢ é¨å‹«ä¼æµ£æ»…å§¸é¬ï¿½
+	int binary_queue[8];//8¸ö16Î»¶ş½øÖÆÊı
+	uchar state[2];//µ±Ç°µÄ¹¤×÷×´Ì¬
 public:
 	Glow_tube();
 	uchar last_state[2];
-	void get_new_number();//é‘¾å³°å½‡é‚ç‰ˆæšŸç€›æ¤¼â‚¬æ„®å§¸é¬ä½µâ‚¬ï¿½
-	void anime(int a);//é‘¾å³°å½‡æ¶“å¶…æ‚“é”ã„§æ•¾
-	uchar return_number(uchar i);//é–«ä½¸åš­éç‰ˆåµ
-	void change_state(uchar state_num, uchar new_state);//é’å›¨å´²å¦¯â€³ç´¡
+	void get_new_number();//»ñÈ¡ĞÂÊı×Ö¡¾×´Ì¬¡¿
+	void anime(int a);//»ñÈ¡²»Í¬¶¯»­
+	uchar return_number(uchar i);//ËÍ³öÊı¾İ
+	void change_state(uchar state_num, uchar new_state);//ÇĞ»»Ä£Ê½
 	uchar get_state(int a);
-	void set_number(uchar a);//éã„©å„´ç¼ƒî†½æšŸ
+	void set_number(uchar a);//È«²¿ÖÃÊı
 	void set_queue(uchar a,uchar b);
 };
 
-//æˆæ’³åš­é‚è§„ç¡¶-----------------------------------------------------------------
+//Êä³ö·½·¨-----------------------------------------------------------------
 class digital_way
 {
 private:
 public:
-	void digital_mission();//æˆæ’³åš­é‘èŠ¥æšŸ
+	void digital_mission();//Êä³öº¯Êı
 	void proofsuccess_anime();
 	void proofailed_anime();
-	void fourway_digital_once(bool a, bool b, bool c, bool d, bool rl);//æ¶“â‚¬å¨†â€³æ´“æµ£å¶…è‹Ÿç›å²ƒç·­é‘ï¿½
-	void digital_onenumber(int a, bool rl);//æˆæ’³åš­æ¶“â‚¬æ¶“î…æšŸç€›ï¿½
+	void fourway_digital_once(bool a, bool b, bool c, bool d, bool rl);//Ò»´ÎËÄÎ»²¢ĞĞÊä³ö
+	void digital_onenumber(int a, bool rl);//Êä³öÒ»¸öÊı×Ö
 };
 
-//æˆæ’³å†é‚è§„ç¡¶-----------------------------------------------------------
+//ÊäÈë·½·¨-----------------------------------------------------------
 class analog_in_way
 {
 private:
@@ -208,14 +208,14 @@ public:
 	void restart_analog();
 };
 
-//é‘¿æ»ƒå´Ÿå¦¯â€³æ½¡--------------------------------------
+//²Ëµ¥Ä£¿é--------------------------------------
 class menu
 {
 private:
 public:
 };
 
-//éµå¬ªå§©ç’‹å†©æ¤‚å¦¯â€³æ½¡
+//ÊÖ¶¯µ÷Ê±Ä£¿é
 class prooftime
 {
 private:
